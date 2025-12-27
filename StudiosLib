@@ -426,7 +426,6 @@ function StudiosLib:CreateWindow(config)
         MainFrame.Visible = false
         MobileBtn.Visible = false
     end
- Linda "Card" Style Components
 
     local mtDragging, mtStart, mtSPos
     MobileBtn.InputBegan:Connect(function(i) if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then mtDragging = true mtStart = i.Position mtSPos = MobileBtn.Position end end)
