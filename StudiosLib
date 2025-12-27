@@ -319,135 +319,36 @@ function StudiosLib:Notify(config)
     end)
 end
 
--- [[ 🎬 V9.0 NEXUS INTRO - HEXAGON MATRIX REVEAL ]]
+-- [[ 🎬 V10.0 MINIMAL INTRO - SIMPLE TEXT ]]
 
 function StudiosLib:PlayIntro()
     local IntroGui = Create("ScreenGui", {Name = "StudiosIntro", Parent = CoreGui})
     
-    -- Dark void background
     local Background = Create("Frame", {
         Parent = IntroGui, 
         Size = UDim2.new(1, 0, 1, 0), 
-        BackgroundColor3 = Color3.fromRGB(5, 5, 10),
+        BackgroundColor3 = Color3.fromRGB(10, 10, 15),
         BackgroundTransparency = 0,
         ZIndex = 1100
     })
     
-    -- Hexagon Grid Container
-    local HexGrid = Create("Frame", {
-        Parent = Background,
-        Size = UDim2.new(1, 0, 1, 0),
-        BackgroundTransparency = 1,
-        ZIndex = 1101
-    })
-    
-    -- Create hexagon grid pattern
-    task.spawn(function()
-        for i = 1, 12 do
-            local hex = Create("Frame", {
-                Parent = HexGrid,
-                Size = UDim2.new(0, 80, 0, 80),
-                Position = UDim2.new(math.random(), 0, math.random(), 0),
-                BackgroundColor3 = Color3.fromHSV(math.random(), 0.6, 0.8),
-                BackgroundTransparency = 1,
-                Rotation = 30,
-                ZIndex = 1102
-            })
-            Create("UICorner", {CornerRadius = UDim.new(0, 12), Parent = hex})
-            Create("UIStroke", {
-                Parent = hex,
-                Thickness = 2,
-                Color = hex.BackgroundColor3,
-                Transparency = 0
-            })
-            
-            task.wait(0.08)
-            Tween(hex, TweenInfo.new(0.6, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {BackgroundTransparency = 0.7})
-            Tween(hex.UIStroke, TweenInfo.new(0.6), {Transparency = 0.3})
-        end
-    end)
-    
-    -- Central Logo with Glitch Effect
-    local LogoContainer = Create("Frame", {
-        Parent = Background,
-        AnchorPoint = Vector2.new(0.5, 0.5),
-        Position = UDim2.new(0.5, 0, 0.5, 0),
-        Size = UDim2.new(0, 600, 0, 200),
-        BackgroundTransparency = 1,
-        ZIndex = 1105
-    })
-    
     local Logo = Create("TextLabel", {
-        Parent = LogoContainer, 
-        Text = "STUDIOS RAW", 
+        Parent = Background, 
+        Text = "Studios Raw", 
         Size = UDim2.new(1, 0, 1, 0), 
         BackgroundTransparency = 1, 
         TextColor3 = Color3.fromRGB(255, 255, 255), 
         Font = Enum.Font.GothamBold, 
         TextSize = 48, 
-        TextTransparency = 1,
-        TextStrokeTransparency = 0.7,
-        TextStrokeColor3 = Color3.fromRGB(0, 200, 255)
+        TextTransparency = 1
     })
     
-    -- Scan Line Effect
-    local ScanLine = Create("Frame", {
-        Parent = Background,
-        Size = UDim2.new(1, 0, 0, 2),
-        Position = UDim2.new(0, 0, 0, 0),
-        BackgroundColor3 = Color3.fromRGB(0, 255, 200),
-        BackgroundTransparency = 0.5,
-        ZIndex = 1110
-    })
-    
-    -- Scan animation
-    task.spawn(function()
-        for i = 1, 3 do
-            Tween(ScanLine, TweenInfo.new(1.5, Enum.EasingStyle.Linear), {Position = UDim2.new(0, 0, 1, 0)})
-            task.wait(1.5)
-            ScanLine.Position = UDim2.new(0, 0, 0, 0)
-        end
-    end)
-    
-    task.wait(0.5)
-    
-    -- Logo reveal with glitch
-    Tween(Logo, TweenInfo.new(0.8, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {TextTransparency = 0})
-    
-    -- Glitch effect
-    task.spawn(function()
-        for i = 1, 6 do
-            Logo.Position = UDim2.new(0, math.random(-5, 5), 0, math.random(-3, 3))
-            task.wait(0.1)
-        end
-        Logo.Position = UDim2.new(0, 0, 0, 0)
-    end)
-    
-    -- Subtitle appear
-    local Subtitle = Create("TextLabel", {
-        Parent = LogoContainer,
-        Text = "V9.0 NEXUS",
-        Size = UDim2.new(1, 0, 0, 30),
-        Position = UDim2.new(0, 0, 1, -20),
-        BackgroundTransparency = 1,
-        TextColor3 = Color3.fromRGB(0, 255, 200),
-        Font = Enum.Font.GothamMedium,
-        TextSize = 14,
-        TextTransparency = 1,
-        ZIndex = 1105
-    })
-    
-    task.wait(0.8)
-    Tween(Subtitle, TweenInfo.new(0.5), {TextTransparency = 0})
-    
+    task.wait(0.3)
+    Tween(Logo, TweenInfo.new(0.6, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {TextTransparency = 0})
     task.wait(2.0)
-    
-    -- Fade out
-    Tween(Background, TweenInfo.new(0.8, Enum.EasingStyle.Quart), {BackgroundTransparency = 1})
-    Tween(Logo, TweenInfo.new(0.8), {TextTransparency = 1})
-    Tween(Subtitle, TweenInfo.new(0.8), {TextTransparency = 1})
-    
-    task.wait(0.8)
+    Tween(Logo, TweenInfo.new(0.6, Enum.EasingStyle.Quart), {TextTransparency = 1})
+    Tween(Background, TweenInfo.new(0.6), {BackgroundTransparency = 1})
+    task.wait(0.6)
     IntroGui:Destroy()
 end
 
