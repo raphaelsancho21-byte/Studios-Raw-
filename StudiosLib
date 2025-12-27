@@ -263,7 +263,7 @@ function StudiosLib:CreateWindow(config)
         BackgroundColor3 = SelectedTheme.Sidebar,
         Image = "rbxassetid://6031070992", -- Home Icon
         ImageColor3 = SelectedTheme.Accent,
-        Visible = true,
+        Visible = not KeyEnabled,
         ZIndex = 500
     })
     Create("UICorner", {CornerRadius = UDim.new(1, 0), Parent = MobileBtn})
@@ -429,6 +429,7 @@ function StudiosLib:CreateWindow(config)
                 if KeyField.Text == k then
                     AuthOverlay:Destroy()
                     MainFrame.Visible = true
+                    MobileBtn.Visible = true
                     StudiosLib:Notify({Title = "Autenticado!", Content = "Acesso garantido ao painel.", Type = "Success"})
                     return
                 end
