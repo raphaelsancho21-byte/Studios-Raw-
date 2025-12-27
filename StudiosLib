@@ -198,8 +198,8 @@ function StudiosLib:PlayIntro()
         Parent = IntroGui, 
         Size = UDim2.new(1, 0, 1, 0), 
         BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-        BackgroundTransparency = 0,
-        ZIndex = 1000
+        BackgroundTransparency = 1,
+        ZIndex = 1100
     })
     
     local Logo = Create("TextLabel", {
@@ -413,7 +413,7 @@ function StudiosLib:CreateWindow(config)
 
     -- [ Authentication Layer ]
     if KeyEnabled then
-        local AuthOverlay = Create("Frame", {Parent = MainGui, Size = UDim2.new(1, 0, 1, 0), BackgroundColor3 = Color3.fromRGB(0, 0, 0), BackgroundTransparency = 0.5, ZIndex = 2000})
+        local AuthOverlay = Create("Frame", {Parent = MainGui, Size = UDim2.new(1, 0, 1, 0), BackgroundColor3 = Color3.fromRGB(0, 0, 0), BackgroundTransparency = 0.8, ZIndex = 2000})
         local AuthBody = Create("Frame", {Parent = AuthOverlay, Size = UDim2.new(0, 450, 0, 280), Position = UDim2.new(0.5, -225, 0.5, -140), BackgroundColor3 = SelectedTheme.Main})
         Create("UICorner", {CornerRadius = UDim.new(0, 18), Parent = AuthBody})
         Create("UIStroke", {Thickness = 3, Color = SelectedTheme.Accent, Parent = AuthBody})
