@@ -639,8 +639,8 @@ function StudiosLib:CreateWindow(config)
     -- V10.0 Sidebar Menu for Tab Selection
     local SideMenu = Create("Frame", {
         Parent = MainFrame,
-        Size = UDim2.new(0, 60, 1, -80),
-        Position = UDim2.new(0, 10, 0, 70),
+        Size = UDim2.new(0, 60, 1, -140),
+        Position = UDim2.new(0, 10, 0, 130),
         BackgroundColor3 = SelectedTheme.Element,
         BackgroundTransparency = 0.5,
         ZIndex = 100
