@@ -1,6 +1,6 @@
--- [[ StudiosLib V3.0 - The Ultimate Rayfield Edition ]]
+-- [[ Studios Raw (V4.0) - The Ultimate Rayfield Edition ]]
 -- Created for "Studios Raw" by Antigravity
--- Build: Final Premium | Mobile Optimized | 800+ Lines Focus
+-- Build: Final Ultra Premium | Mobile Optimized | 850+ Lines Focus
 -- License: Open Source (Studios Raw)
 
 local StudiosLib = {
@@ -35,9 +35,9 @@ StudiosLib.Themes = {
         Accent = Color3.fromRGB(255, 255, 255),
         Text = Color3.fromRGB(255, 255, 255),
         SubText = Color3.fromRGB(160, 160, 180),
-        Element = Color3.fromRGB(20, 20, 25),
-        Hover = Color3.fromRGB(30, 30, 40),
-        Stroke = Color3.fromRGB(45, 45, 60),
+        Element = Color3.fromRGB(25, 25, 30),
+        Hover = Color3.fromRGB(35, 35, 45),
+        Stroke = Color3.fromRGB(50, 50, 70),
         Success = Color3.fromRGB(50, 255, 150),
         Error = Color3.fromRGB(255, 70, 70),
         SelectedText = Color3.fromRGB(0, 0, 0)
@@ -87,9 +87,9 @@ StudiosLib.Themes = {
         Accent = Color3.fromRGB(255, 0, 255),
         Text = Color3.fromRGB(255, 255, 255),
         SubText = Color3.fromRGB(200, 0, 200),
-        Element = Color3.fromRGB(20, 0, 40),
-        Hover = Color3.fromRGB(30, 0, 60),
-        Stroke = Color3.fromRGB(255, 0, 255),
+        Element = Color3.fromRGB(30, 0, 60),
+        Hover = Color3.fromRGB(45, 0, 90),
+        Stroke = Color3.fromRGB(200, 0, 255),
         Success = Color3.fromRGB(0, 255, 255),
         Error = Color3.fromRGB(255, 0, 0),
         SelectedText = Color3.fromRGB(255, 255, 255)
@@ -181,7 +181,8 @@ function StudiosLib:Notify(config)
     })
 
     -- Entry Animation
-    Tween(NotifFrame, TweenInfo.new(0.6, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(1, 0, 0, 90)})
+    NotifFrame.Size = UDim2.new(1, 0, 0, 0)
+    Tween(NotifFrame, TweenInfo.new(0.7, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Size = UDim2.new(1, 0, 0, 90)})
     
     task.spawn(function()
         task.wait(Duration)
@@ -245,7 +246,7 @@ end
 -- [[ 🪟 MASTER UI WINDOW COMPONENT ]]
 
 function StudiosLib:CreateWindow(config)
-    local WindowName = config.Name or "StudiosLib V3.0"
+    local WindowName = config.Name or "Studios Raw (V4.0)"
     local SelectedTheme = StudiosLib.Themes[config.Theme] or StudiosLib.Themes.Default
     StudiosLib.SelectedTheme = SelectedTheme
     
@@ -288,11 +289,13 @@ function StudiosLib:CreateWindow(config)
     })
     Create("UICorner", {CornerRadius = UDim.new(0, 16), Parent = MainFrame})
     local AppStroke = Create("UIStroke", {Thickness = 2.5, Color = SelectedTheme.Stroke, Parent = MainFrame})
+    local AppScale = Create("UIScale", {Parent = MainFrame, Scale = 0.7})
 
     -- Initialization of visibility after creation
     if not KeyEnabled then
         MainFrame.Visible = true
         MobileBtn.Visible = true
+        Tween(AppScale, TweenInfo.new(0.6, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Scale = 1})
     else
         MainFrame.Visible = false
         MobileBtn.Visible = false
@@ -305,6 +308,7 @@ function StudiosLib:CreateWindow(config)
 
     MobileBtn.MouseButton1Click:Connect(function() 
         if KeyEnabled and not StudiosLib.Authenticated then return end
+        Tween(MobileBtn, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out, 0, true), {Size = UDim2.new(0, 45, 0, 45)})
         MainFrame.Visible = not MainFrame.Visible 
     end)
 
@@ -316,6 +320,14 @@ function StudiosLib:CreateWindow(config)
         BorderSizePixel = 0
     })
     Create("UICorner", {CornerRadius = UDim.new(0, 16), Parent = Sidebar})
+    Create("UIGradient", {
+        Parent = Sidebar,
+        Color = ColorSequence.new({
+            ColorSequenceKeypoint.new(0, Color3.new(1, 1, 1)),
+            ColorSequenceKeypoint.new(1, Color3.fromRGB(200, 200, 200))
+        }),
+        Rotation = 90
+    })
 
     local TitleLbl = Create("TextLabel", {
         Parent = Sidebar,
@@ -351,6 +363,15 @@ function StudiosLib:CreateWindow(config)
         Size = UDim2.new(1, -220, 0, 80),
         Position = UDim2.new(0, 220, 0, 0),
         BackgroundTransparency = 1
+    })
+    Create("UIGradient", {
+        Parent = TopBar,
+        Color = ColorSequence.new({
+            ColorSequenceKeypoint.new(0, SelectedTheme.Main),
+            ColorSequenceKeypoint.new(1, SelectedTheme.Sidebar)
+        }),
+        Rotation = 90,
+        Enabled = false -- Will enable if we use a background instead of transparency
     })
 
     local TabNameLbl = Create("TextLabel", {
@@ -436,6 +457,8 @@ function StudiosLib:CreateWindow(config)
         local AuthBody = Create("Frame", {Parent = AuthOverlay, Size = UDim2.new(0, 450, 0, 280), Position = UDim2.new(0.5, -225, 0.5, -140), BackgroundColor3 = SelectedTheme.Main})
         Create("UICorner", {CornerRadius = UDim.new(0, 18), Parent = AuthBody})
         Create("UIStroke", {Thickness = 3, Color = SelectedTheme.Accent, Parent = AuthBody})
+        local AuthScale = Create("UIScale", {Parent = AuthBody, Scale = 0.8})
+        Tween(AuthScale, TweenInfo.new(0.6, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1})
 
         Create("TextLabel", {Parent = AuthBody, Text = "SISTEMA DE ACESSO", Size = UDim2.new(1, 0, 0, 80), BackgroundTransparency = 1, TextColor3 = SelectedTheme.Text, Font = Enum.Font.GothamBold, TextSize = 25})
         local KeyField = Create("TextBox", {Parent = AuthBody, PlaceholderText = "Token de Liberação...", Size = UDim2.new(0.85, 0, 0, 60), Position = UDim2.new(0.075, 0, 0.35, 0), BackgroundColor3 = SelectedTheme.Element, TextColor3 = SelectedTheme.Text, PlaceholderColor3 = SelectedTheme.SubText, Font = Enum.Font.Gotham, TextSize = 18})
@@ -447,9 +470,13 @@ function StudiosLib:CreateWindow(config)
             for _, k in pairs(Keys) do
                 if KeyField.Text == k then
                     StudiosLib.Authenticated = true
+                    Tween(AuthScale, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Scale = 0.8})
+                    Tween(AuthOverlay, TweenInfo.new(0.4), {BackgroundTransparency = 1})
+                    task.wait(0.4)
                     AuthOverlay:Destroy()
                     MainFrame.Visible = true
                     MobileBtn.Visible = true
+                    Tween(AppScale, TweenInfo.new(0.6, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Scale = 1})
                     StudiosLib:Notify({Title = "Autenticado!", Content = "Acesso garantido ao painel.", Type = "Success"})
                     return
                 end
@@ -473,6 +500,7 @@ function StudiosLib:CreateWindow(config)
             AutoButtonColor = false
         })
         Create("UICorner", {CornerRadius = UDim.new(0, 12), Parent = TabBtn})
+        local TabStroke = Create("UIStroke", {Thickness = 1.5, Color = SelectedTheme.Stroke, Transparency = 1, Parent = TabBtn})
         
         local TabIcon = Create("ImageLabel", {
             Parent = TabBtn, 
@@ -495,17 +523,23 @@ function StudiosLib:CreateWindow(config)
             TextXAlignment = Enum.TextXAlignment.Left
         })
 
-        local Page = Create("ScrollingFrame", {
+        local Page = Create("CanvasGroup", {
             Parent = ContentHolder, 
             Size = UDim2.new(1, 0, 1, 0), 
             BackgroundTransparency = 1, 
-            Visible = false, 
-            ScrollBarThickness = 3, 
-            ScrollBarImageColor3 = SelectedTheme.Accent, 
+            Visible = false,
+            GroupTransparency = 1
+        })
+        local PageScroll = Create("ScrollingFrame", {
+            Parent = Page,
+            Size = UDim2.new(1, 0, 1, 0),
+            BackgroundTransparency = 1,
+            ScrollBarThickness = 3,
+            ScrollBarImageColor3 = SelectedTheme.Accent,
             AutomaticCanvasSize = Enum.AutomaticSize.Y
         })
-        Create("UIListLayout", {Parent = Page, Padding = UDim.new(0, 15), HorizontalAlignment = Enum.HorizontalAlignment.Center})
-        Create("UIPadding", {Parent = Page, PaddingLeft = UDim.new(0, 5), PaddingTop = UDim.new(0, 10)})
+        Create("UIListLayout", {Parent = PageScroll, Padding = UDim.new(0, 15), HorizontalAlignment = Enum.HorizontalAlignment.Center})
+        Create("UIPadding", {Parent = PageScroll, PaddingLeft = UDim.new(0, 5), PaddingTop = UDim.new(0, 10)})
 
         local function ActivateTab()
             for _, p in pairs(ContentHolder:GetChildren()) do if p:IsA("ScrollingFrame") then p.Visible = false end end
@@ -520,6 +554,12 @@ function StudiosLib:CreateWindow(config)
             Tween(TabBtn, TweenInfo.new(0.5, Enum.EasingStyle.Quart), {BackgroundTransparency = 0, BackgroundColor3 = SelectedTheme.Accent})
             Tween(TabIcon, TweenInfo.new(0.5, Enum.EasingStyle.Quart), {ImageColor3 = SelectedTheme.SelectedText})
             Tween(TabLbl, TweenInfo.new(0.5, Enum.EasingStyle.Quart), {TextColor3 = SelectedTheme.SelectedText})
+            Tween(TabStroke, TweenInfo.new(0.5), {Transparency = 0})
+
+            -- Page Slide Animation
+            Page.Position = UDim2.new(0, 30, 0, 0)
+            Page.GroupTransparency = 1
+            Tween(Page, TweenInfo.new(0.5, Enum.EasingStyle.Quart), {Position = UDim2.new(0, 0, 0, 0), GroupTransparency = 0})
         end
 
         TabBtn.MouseButton1Click:Connect(ActivateTab)
@@ -531,7 +571,7 @@ function StudiosLib:CreateWindow(config)
         -- [ COMPONENT: HIGH-QUALITY BUTTON ]
         function TabAPI:CreateButton(bCfg)
             local Btn = Create("TextButton", {
-                Parent = Page, 
+                Parent = PageScroll, 
                 Size = UDim2.new(1, -30, 0, 52), 
                 BackgroundColor3 = SelectedTheme.Element, 
                 Text = "", 
@@ -541,8 +581,14 @@ function StudiosLib:CreateWindow(config)
             Create("UIStroke", {Thickness = 1.5, Color = SelectedTheme.Stroke, Parent = Btn})
             Create("TextLabel", {Parent = Btn, Text = bCfg.Name, Size = UDim2.new(1, 0, 1, 0), BackgroundTransparency = 1, TextColor3 = SelectedTheme.Text, Font = Enum.Font.GothamMedium, TextSize = 15})
             
-            Btn.MouseEnter:Connect(function() Tween(Btn, TweenInfo.new(0.3), {BackgroundColor3 = SelectedTheme.Hover}) end)
-            Btn.MouseLeave:Connect(function() Tween(Btn, TweenInfo.new(0.3), {BackgroundColor3 = SelectedTheme.Element}) end)
+            Btn.MouseEnter:Connect(function() 
+                Tween(Btn, TweenInfo.new(0.3), {BackgroundColor3 = SelectedTheme.Hover}) 
+                Tween(Btn.UIStroke, TweenInfo.new(0.3), {Color = SelectedTheme.Accent})
+            end)
+            Btn.MouseLeave:Connect(function() 
+                Tween(Btn, TweenInfo.new(0.3), {BackgroundColor3 = SelectedTheme.Element}) 
+                Tween(Btn.UIStroke, TweenInfo.new(0.3), {Color = SelectedTheme.Stroke})
+            end)
             Btn.MouseButton1Click:Connect(function()
                 Tween(Btn, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, 1, true), {Size = UDim2.new(1, -40, 0, 48)})
                 bCfg.Callback()
@@ -552,9 +598,12 @@ function StudiosLib:CreateWindow(config)
         -- [ COMPONENT: MODERN TOGGLE ]
         function TabAPI:CreateToggle(tCfg)
             local val = tCfg.CurrentValue or false
-            local Tgl = Create("Frame", {Parent = Page, Size = UDim2.new(1, -30, 0, 60), BackgroundColor3 = SelectedTheme.Element})
+            local Tgl = Create("Frame", {Parent = PageScroll, Size = UDim2.new(1, -30, 0, 60), BackgroundColor3 = SelectedTheme.Element})
             Create("UICorner", {CornerRadius = UDim.new(0, 12), Parent = Tgl})
             Create("UIStroke", {Thickness = 1.5, Color = SelectedTheme.Stroke, Parent = Tgl})
+            
+            Tgl.MouseEnter:Connect(function() Tween(Tgl, TweenInfo.new(0.3), {BackgroundColor3 = SelectedTheme.Hover}) Tween(Tgl.UIStroke, TweenInfo.new(0.3), {Color = SelectedTheme.Accent}) end)
+            Tgl.MouseLeave:Connect(function() Tween(Tgl, TweenInfo.new(0.3), {BackgroundColor3 = SelectedTheme.Element}) Tween(Tgl.UIStroke, TweenInfo.new(0.3), {Color = SelectedTheme.Stroke}) end)
             
             Create("TextLabel", {Parent = Tgl, Text = tCfg.Name, Size = UDim2.new(0.6, 0, 1, 0), Position = UDim2.new(0, 20, 0, 0), BackgroundTransparency = 1, TextColor3 = SelectedTheme.Text, Font = Enum.Font.Gotham, TextSize = 15, TextXAlignment = Enum.TextXAlignment.Left})
             
@@ -574,9 +623,12 @@ function StudiosLib:CreateWindow(config)
         -- [ COMPONENT: PRECISION SLIDER ]
         function TabAPI:CreateSlider(sCfg)
             local min, max, cur = sCfg.Min, sCfg.Max, sCfg.CurrentValue or sCfg.Min
-            local Sld = Create("Frame", {Parent = Page, Size = UDim2.new(1, -30, 0, 75), BackgroundColor3 = SelectedTheme.Element})
+            local Sld = Create("Frame", {Parent = PageScroll, Size = UDim2.new(1, -30, 0, 75), BackgroundColor3 = SelectedTheme.Element})
             Create("UICorner", {CornerRadius = UDim.new(0, 12), Parent = Sld})
             Create("UIStroke", {Thickness = 1.5, Color = SelectedTheme.Stroke, Parent = Sld})
+
+            Sld.MouseEnter:Connect(function() Tween(Sld, TweenInfo.new(0.3), {BackgroundColor3 = SelectedTheme.Hover}) Tween(Sld.UIStroke, TweenInfo.new(0.3), {Color = SelectedTheme.Accent}) end)
+            Sld.MouseLeave:Connect(function() Tween(Sld, TweenInfo.new(0.3), {BackgroundColor3 = SelectedTheme.Element}) Tween(Sld.UIStroke, TweenInfo.new(0.3), {Color = SelectedTheme.Stroke}) end)
 
             Create("TextLabel", {Parent = Sld, Text = sCfg.Name, Size = UDim2.new(0.6, 0, 0, 40), Position = UDim2.new(0, 20, 0, 5), BackgroundTransparency = 1, TextColor3 = SelectedTheme.Text, Font = Enum.Font.Gotham, TextSize = 15, TextXAlignment = Enum.TextXAlignment.Left})
             local vLbl = Create("TextLabel", {Parent = Sld, Text = tostring(cur), Size = UDim2.new(0, 70, 0, 40), Position = UDim2.new(1, -90, 0, 5), BackgroundTransparency = 1, TextColor3 = SelectedTheme.Accent, Font = Enum.Font.GothamBold, TextSize = 16, TextXAlignment = Enum.TextXAlignment.Right})
@@ -585,6 +637,8 @@ function StudiosLib:CreateWindow(config)
             Create("UICorner", {CornerRadius = UDim.new(1, 0), Parent = Trakn})
             local Progress = Create("Frame", {Parent = Trakn, Size = UDim2.new((cur - min) / (max - min), 0, 1, 0), BackgroundColor3 = SelectedTheme.Accent})
             Create("UICorner", {CornerRadius = UDim.new(1, 0), Parent = Progress})
+            local Glow = Create("Frame", {Parent = Progress, Size = UDim2.new(1, 10, 1, 10), Position = UDim2.new(0, -5, 0, -5), BackgroundColor3 = SelectedTheme.Accent, BackgroundTransparency = 0.8, ZIndex = -1})
+            Create("UICorner", {CornerRadius = UDim.new(1, 0), Parent = Glow})
 
             local isSld = false
             local function Refresh()
@@ -602,7 +656,7 @@ function StudiosLib:CreateWindow(config)
         -- [ COMPONENT: DYNAMIC DROPDOWN ]
         function TabAPI:CreateDropdown(dCfg)
             local now = dCfg.CurrentOption or dCfg.Options[1]
-            local Dp = Create("Frame", {Parent = Page, Size = UDim2.new(1, -30, 0, 55), BackgroundColor3 = SelectedTheme.Element, ClipsDescendants = true})
+            local Dp = Create("Frame", {Parent = PageScroll, Size = UDim2.new(1, -30, 0, 55), BackgroundColor3 = SelectedTheme.Element, ClipsDescendants = true})
             Create("UICorner", {CornerRadius = UDim.new(0, 12), Parent = Dp})
             Create("UIStroke", {Thickness = 1.5, Color = SelectedTheme.Stroke, Parent = Dp})
 
@@ -619,8 +673,12 @@ function StudiosLib:CreateWindow(config)
                 oRow.MouseLeave:Connect(function() Tween(oRow, TweenInfo.new(0.25), {TextColor3 = SelectedTheme.SubText}) end)
                 oRow.MouseButton1Click:Connect(function()
                     now = opt tLbl.Text = dCfg.Name .. ": " .. opt dCfg.Callback(opt)
+                    isOpen = false
                     Tween(Dp, TweenInfo.new(0.6, Enum.EasingStyle.Quart), {Size = UDim2.new(1, -30, 0, 55)}) tIcon.Text = "▼"
                 end)
+                
+                oRow.MouseEnter:Connect(function() Tween(oRow, TweenInfo.new(0.2), {BackgroundColor3 = SelectedTheme.Hover, BackgroundTransparency = 0.5}) end)
+                oRow.MouseLeave:Connect(function() Tween(oRow, TweenInfo.new(0.2), {BackgroundColor3 = SelectedTheme.Element, BackgroundTransparency = 1}) end)
             end
 
             local isOpen = false
@@ -632,20 +690,24 @@ function StudiosLib:CreateWindow(config)
 
         -- [ COMPONENT: ADAPTABLE INPUT ]
         function TabAPI:CreateInput(iCfg)
-            local Frm = Create("Frame", {Parent = Page, Size = UDim2.new(1, -30, 0, 60), BackgroundColor3 = SelectedTheme.Element})
+            local Frm = Create("Frame", {Parent = PageScroll, Size = UDim2.new(1, -30, 0, 60), BackgroundColor3 = SelectedTheme.Element})
             Create("UICorner", {CornerRadius = UDim.new(0, 12), Parent = Frm})
             Create("UIStroke", {Thickness = 1.5, Color = SelectedTheme.Stroke, Parent = Frm})
 
             Create("TextLabel", {Parent = Frm, Text = iCfg.Name, Size = UDim2.new(0.5, 0, 1, 0), Position = UDim2.new(0, 20, 0, 0), BackgroundTransparency = 1, TextColor3 = SelectedTheme.Text, Font = Enum.Font.Gotham, TextSize = 15, TextXAlignment = Enum.TextXAlignment.Left})
             local Box = Create("TextBox", {Parent = Frm, PlaceholderText = iCfg.Placeholder or "Digite...", Size = UDim2.new(0, 160, 0, 38), Position = UDim2.new(1, -180, 0.5, -19), BackgroundColor3 = SelectedTheme.Main, TextColor3 = SelectedTheme.Text, Font = Enum.Font.Gotham, TextSize = 14})
             Create("UICorner", {CornerRadius = UDim.new(0, 10), Parent = Box})
-            Box.FocusLost:Connect(function(ok) if ok then iCfg.Callback(Box.Text) end end)
+            Box.Focused:Connect(function() Tween(Frm.UIStroke, TweenInfo.new(0.3), {Color = SelectedTheme.Accent, Thickness = 2}) end)
+            Box.FocusLost:Connect(function(ok) 
+                Tween(Frm.UIStroke, TweenInfo.new(0.3), {Color = SelectedTheme.Stroke, Thickness = 1.5})
+                if ok then iCfg.Callback(Box.Text) end 
+            end)
         end
 
         -- [ COMPONENT: KEYBIND BINDABLE ]
         function TabAPI:CreateKeybind(kCfg)
             local kVal = kCfg.CurrentKeybind or Enum.KeyCode.F
-            local kFrm = Create("Frame", {Parent = Page, Size = UDim2.new(1, -30, 0, 60), BackgroundColor3 = SelectedTheme.Element})
+            local kFrm = Create("Frame", {Parent = PageScroll, Size = UDim2.new(1, -30, 0, 60), BackgroundColor3 = SelectedTheme.Element})
             Create("UICorner", {CornerRadius = UDim.new(0, 12), Parent = kFrm})
             Create("UIStroke", {Thickness = 1.5, Color = SelectedTheme.Stroke, Parent = kFrm})
 
@@ -666,7 +728,7 @@ function StudiosLib:CreateWindow(config)
 
         -- [ COMPONENT: RICH PARAGRAPH ]
         function TabAPI:CreateParagraph(pCfg)
-            local pF = Create("Frame", {Parent = Page, Size = UDim2.new(1, -30, 0, 75), BackgroundColor3 = SelectedTheme.Element})
+            local pF = Create("Frame", {Parent = PageScroll, Size = UDim2.new(1, -30, 0, 75), BackgroundColor3 = SelectedTheme.Element})
             Create("UICorner", {CornerRadius = UDim.new(0, 12), Parent = pF})
             Create("UIStroke", {Thickness = 1.5, Color = SelectedTheme.Stroke, Parent = pF})
 
@@ -676,7 +738,7 @@ function StudiosLib:CreateWindow(config)
 
         -- [ COMPONENT: STYLISH SECTION ]
         function TabAPI:CreateSection(sTxt)
-            local Sct = Create("TextLabel", {Parent = Page, Size = UDim2.new(1, -30, 0, 40), BackgroundTransparency = 1, Text = sTxt:upper(), TextColor3 = SelectedTheme.Accent, Font = Enum.Font.GothamBold, TextSize = 13, TextXAlignment = Enum.TextXAlignment.Left})
+            local Sct = Create("TextLabel", {Parent = PageScroll, Size = UDim2.new(1, -30, 0, 40), BackgroundTransparency = 1, Text = sTxt:upper(), TextColor3 = SelectedTheme.Accent, Font = Enum.Font.GothamBold, TextSize = 13, TextXAlignment = Enum.TextXAlignment.Left})
             Create("UIPadding", {Parent = Sct, PaddingLeft = UDim.new(0, 6)})
         end
 
