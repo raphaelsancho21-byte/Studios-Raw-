@@ -328,7 +328,7 @@ function StudiosLib:PlayIntro()
         Parent = IntroGui, 
         Size = UDim2.new(1, 0, 1, 0), 
         BackgroundColor3 = Color3.fromRGB(10, 10, 15),
-        BackgroundTransparency = 0,
+        BackgroundTransparency = 1,
         ZIndex = 1100
     })
     
