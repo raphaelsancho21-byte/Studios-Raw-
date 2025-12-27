@@ -1,4 +1,4 @@
--- [[ Studios Raw (V9.0) - Nexus UI Revolution ]]
+-- [[ Studios Raw (V10.0) - Aurora Interface Redesign ]]
 -- Created for "Studios Raw" by Antigravity
 -- Build: Final Ultra Premium | Mobile Optimized | 850+ Lines Focus
 -- License: Open Source (Studios Raw)
@@ -454,7 +454,7 @@ end
 -- [[ 🪟 MASTER UI WINDOW COMPONENT ]]
 
 function StudiosLib:CreateWindow(config)
-    local WindowName = config.Name or "Studios Raw (V9.0)"
+    local WindowName = config.Name or "Studios Raw (V10.0)"
     local SelectedTheme = StudiosLib.Themes[config.Theme] or StudiosLib.Themes.Default
     StudiosLib.SelectedTheme = SelectedTheme
     
@@ -568,56 +568,33 @@ function StudiosLib:CreateWindow(config)
         MainFrame.Visible = not MainFrame.Visible 
     end)
 
-    -- [ V7.0 Horizon Layout Elements ]
-    local TopNav = Create("Frame", {
+    -- [ V10.0 Aurora Minimalist Header ]
+    local Header = Create("Frame", {
         Parent = MainFrame,
-        Size = UDim2.new(1, -40, 0, 55),
-        Position = UDim2.new(0, 20, 0, 70),
+        Size = UDim2.new(1, 0, 0, 60),
+        Position = UDim2.new(0, 0, 0, 0),
         BackgroundTransparency = 1,
         ZIndex = 105
     })
-    local NavList = Create("ScrollingFrame", {
-        Parent = TopNav,
-        Size = UDim2.new(1, 0, 1, 0),
+    
+    -- Logo
+    local LogoText = Create("TextLabel", {
+        Parent = Header,
+        Text = "⚡ " .. WindowName,
+        Size = UDim2.new(0, 200, 1, 0),
+        Position = UDim2.new(0, 20, 0, 0),
         BackgroundTransparency = 1,
-        ScrollBarThickness = 0,
-        CanvasSize = UDim2.new(0, 0, 1, 0),
-        AutomaticCanvasSize = Enum.AutomaticSize.X
+        TextColor3 = SelectedTheme.Accent,
+        Font = Enum.Font.GothamBold,
+        TextSize = 18,
+        TextXAlignment = Enum.TextXAlignment.Left
     })
-    Create("UIListLayout", {
-        Parent = NavList, 
-        Padding = UDim.new(0, 25), 
-        FillDirection = Enum.FillDirection.Horizontal, 
-        VerticalAlignment = Enum.VerticalAlignment.Center,
-        HorizontalAlignment = Enum.HorizontalAlignment.Left
-    })
-    Create("UIPadding", {Parent = NavList, PaddingLeft = UDim.new(0, 10)})
-
-    -- Underline Glow
-    local NavGlow = Create("Frame", {
-        Parent = NavList,
-        Size = UDim2.new(0, 0, 0, 2),
-        Position = UDim2.new(0, 0, 1, -5),
-        BackgroundColor3 = SelectedTheme.Accent,
-        ZIndex = 110,
-        Visible = false
-    })
-    Create("UICorner", {CornerRadius = UDim.new(1, 0), Parent = NavGlow})
-
-    -- [ V6.0 Render Loop ]
-    RunService.RenderStepped:Connect(function()
-        if MainFrame.Visible then
-            local mPos = UserInputService:GetMouseLocation()
-            local rPos = Vector2.new(mPos.X - MainFrame.AbsolutePosition.X, mPos.Y - (MainFrame.AbsolutePosition.Y + 36))
-            Tween(MouseGlow, TweenInfo.new(0.2, Enum.EasingStyle.Linear), {Position = UDim2.new(0, rPos.X - 150, 0, rPos.Y - 150)})
-        end
-    end)
-
-    -- [ Content Container ]
+    
+    -- V10.0 Content Container (Full Screen Dashboard)
     local ContentHolder = Create("Frame", {
         Parent = MainFrame,
-        Size = UDim2.new(1, -40, 1, -150),
-        Position = UDim2.new(0, 20, 0, 130),
+        Size = UDim2.new(1, -40, 1, -80),
+        Position = UDim2.new(0, 20, 0, 70),
         BackgroundTransparency = 1
     })
 
@@ -754,62 +731,45 @@ function StudiosLib:CreateWindow(config)
     end
 
     -- [ Window Object Structure ]
-    local WindowAPI = {Tabs = {}}
+    local WindowAPI = {Tabs = {}, CurrentTab = nil}
+    
+    -- V10.0 Sidebar Menu for Tab Selection
+    local SideMenu = Create("Frame", {
+        Parent = MainFrame,
+        Size = UDim2.new(0, 60, 1, -80),
+        Position = UDim2.new(0, 10, 0, 70),
+        BackgroundColor3 = SelectedTheme.Element,
+        BackgroundTransparency = 0.5,
+        ZIndex = 106
+    })
+    Create("UICorner", {CornerRadius = UDim.new(0, 16), Parent = SideMenu})
+    Create("UIListLayout", {Parent = SideMenu, Padding = UDim.new(0, 8), HorizontalAlignment = Enum.HorizontalAlignment.Center, SortOrder = Enum.SortOrder.LayoutOrder})
+    Create("UIPadding", {Parent = SideMenu, PaddingTop = UDim.new(0, 10)})
 
     function WindowAPI:CreateTab(name, icon)
-        local TabBtn = Create("TextButton", {
-            Parent = NavList, 
-            Size = UDim2.new(0, 120, 1, 0), 
-            BackgroundTransparency = 1, 
-            Text = "", 
-            AutoButtonColor = false
-        })
-        
-        local TabIcon = Create("ImageLabel", {
-            Parent = TabBtn, 
-            Size = UDim2.new(0, 22, 0, 22), 
-            Position = UDim2.new(0, 10, 0.5, -11), 
-            BackgroundTransparency = 1, 
-            Image = icon or "rbxassetid://6031070992", 
-            ImageColor3 = SelectedTheme.SubText
-        })
-        
-        -- V9.0 Icon Glow Effect
-        local IconGlow = Create("ImageLabel", {
-            Parent = TabBtn,
-            Size = UDim2.new(0, 30, 0, 30),
-            Position = UDim2.new(0, 6, 0.5, -15),
+        -- Tab Icon Button in Sidebar
+        local TabBtn = Create("ImageButton", {
+            Parent = SideMenu,
+            Size = UDim2.new(0, 44, 0, 44),
+            BackgroundColor3 = SelectedTheme.Element,
             BackgroundTransparency = 1,
-            Image = "rbxassetid://3570695787",
-            ImageColor3 = SelectedTheme.Accent,
-            ImageTransparency = 1,
-            ZIndex = -1
+            Image = icon or "rbxassetid://6031070992",
+            ImageColor3 = SelectedTheme.SubText,
+            ZIndex = 107
         })
+        Create("UICorner", {CornerRadius = UDim.new(0, 12), Parent = TabBtn})
         
-        local TabLbl = Create("TextLabel", {
-            Parent = TabBtn, 
-            Text = name, 
-            Size = UDim2.new(1, -40, 1, 0), 
-            Position = UDim2.new(0, 38, 0, 0), 
-            BackgroundTransparency = 1, 
-            TextColor3 = SelectedTheme.SubText, 
-            Font = Enum.Font.GothamSemibold, 
-            TextSize = 14, 
-            TextXAlignment = Enum.TextXAlignment.Left
-        })
-        
-        -- V9.0 Hover Effects
+        -- Hover effect
         TabBtn.MouseEnter:Connect(function()
-            Tween(TabIcon, TweenInfo.new(0.3), {ImageColor3 = SelectedTheme.Accent, Size = UDim2.new(0, 24, 0, 24), Position = UDim2.new(0, 9, 0.5, -12)})
-            Tween(TabLbl, TweenInfo.new(0.3), {TextColor3 = SelectedTheme.Text})
-            Tween(IconGlow, TweenInfo.new(0.3), {ImageTransparency = 0.7})
+            Tween(TabBtn, TweenInfo.new(0.2), {BackgroundTransparency = 0, BackgroundColor3 = SelectedTheme.Hover})
+            Tween(TabBtn, TweenInfo.new(0.2), {ImageColor3 = SelectedTheme.Accent})
         end)
         
         TabBtn.MouseLeave:Connect(function()
-            if Page.Visible then return end -- Don't reset if active
-            Tween(TabIcon, TweenInfo.new(0.3), {ImageColor3 = SelectedTheme.SubText, Size = UDim2.new(0, 22, 0, 22), Position = UDim2.new(0, 10, 0.5, -11)})
-            Tween(TabLbl, TweenInfo.new(0.3), {TextColor3 = SelectedTheme.SubText})
-            Tween(IconGlow, TweenInfo.new(0.3), {ImageTransparency = 1})
+            if WindowAPI.CurrentTab ~= name then
+                Tween(TabBtn, TweenInfo.new(0.2), {BackgroundTransparency = 1})
+                Tween(TabBtn, TweenInfo.new(0.2), {ImageColor3 = SelectedTheme.SubText})
+            end
         end)
 
         local Page = Create("CanvasGroup", {
@@ -831,39 +791,32 @@ function StudiosLib:CreateWindow(config)
         Create("UIPadding", {Parent = PageScroll, PaddingLeft = UDim.new(0, 5), PaddingTop = UDim.new(0, 10)})
 
         local function ActivateTab()
-            for _, p in pairs(ContentHolder:GetChildren()) do if p:IsA("CanvasGroup") then p.Visible = false end end
-            for _, b in pairs(NavList:GetChildren()) do if b:IsA("TextButton") then
-                Tween(b, TweenInfo.new(0.4), {BackgroundTransparency = 1})
-                Tween(b.ImageLabel, TweenInfo.new(0.4), {ImageColor3 = SelectedTheme.SubText})
-                Tween(b.TextLabel, TweenInfo.new(0.4), {TextColor3 = SelectedTheme.SubText})
-            end end
+            for _, p in pairs(ContentHolder:GetChildren()) do 
+                if p:IsA("CanvasGroup") then 
+                    p.Visible = false 
+                end 
+            end
             
+            -- Reset all tab buttons
+            for _, btn in pairs(SideMenu:GetChildren()) do
+                if btn:IsA("ImageButton") then
+                    Tween(btn, TweenInfo.new(0.3), {BackgroundTransparency = 1, ImageColor3 = SelectedTheme.SubText})
+                end
+            end
+            
+            -- Activate current tab
+            WindowAPI.CurrentTab = name
             Page.Visible = true
-            TabNameLbl.Text = name
+            LogoText.Text = "⚡ " .. name
             
-            -- Nav Glow Logic
-            NavGlow.Visible = true
-            Tween(NavGlow, TweenInfo.new(0.5, Enum.EasingStyle.Quart), {
-                Size = UDim2.new(0, TabBtn.AbsoluteSize.X, 0, 2),
-                Position = UDim2.new(0, TabBtn.AbsolutePosition.X - NavList.AbsolutePosition.X, 1, -5)
-            })
-
-            Tween(TabIcon, TweenInfo.new(0.5), {ImageColor3 = SelectedTheme.Accent})
-            Tween(TabLbl, TweenInfo.new(0.5), {TextColor3 = SelectedTheme.Text})
-
-            -- Page Slide & Zoom Animation (V7 Cross-Fade Zoom)
-            Page.Position = UDim2.new(0, 0, 0, 10)
-            Page.Size = UDim2.new(1.05, 0, 1.05, 0)
+            Tween(TabBtn, TweenInfo.new(0.3), {BackgroundTransparency = 0, BackgroundColor3 = SelectedTheme.Accent, ImageColor3 = Color3.fromRGB(255, 255, 255)})
+            
+            -- V10.0 Smooth Fade In
             Page.GroupTransparency = 1
-            Tween(Page, TweenInfo.new(0.6, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-                Position = UDim2.new(0, 0, 0, 0), 
-                Size = UDim2.new(1, 0, 1, 0),
-                GroupTransparency = 0
-            })
+            Tween(Page, TweenInfo.new(0.4, Enum.EasingStyle.Quart), {GroupTransparency = 0})
         end
 
         TabBtn.MouseButton1Click:Connect(function()
-            Ripple(TabBtn)
             ActivateTab()
         end)
         if #WindowAPI.Tabs == 0 then ActivateTab() end
@@ -871,19 +824,17 @@ function StudiosLib:CreateWindow(config)
         local TabAPI = {}
         table.insert(WindowAPI.Tabs, TabAPI)
 
-        -- [ COMPONENT: HIGH-QUALITY BUTTON ]
+        -- [ V10.0 COMPONENT: PILL BUTTON ]
         function TabAPI:CreateButton(bCfg)
             local Btn = Create("TextButton", {
                 Parent = PageScroll, 
-                Size = UDim2.new(1, -30, 0, 52), 
-                BackgroundColor3 = SelectedTheme.Element, 
-                BackgroundTransparency = 0.2, -- Card Feel
+                Size = UDim2.new(1, -30, 0, 48), 
+                BackgroundColor3 = SelectedTheme.Accent, 
                 Text = "", 
                 AutoButtonColor = false
             })
-            Create("UICorner", {CornerRadius = UDim.new(0, 14), Parent = Btn})
-            Create("UIStroke", {Thickness = 1.5, Color = SelectedTheme.Stroke, Parent = Btn})
-            Create("TextLabel", {Parent = Btn, Text = bCfg.Name, Size = UDim2.new(1, 0, 1, 0), BackgroundTransparency = 1, TextColor3 = SelectedTheme.Text, Font = Enum.Font.GothamMedium, TextSize = 15})
+            Create("UICorner", {CornerRadius = UDim.new(1, 0), Parent = Btn}) -- Fully rounded (pill)
+            Create("TextLabel", {Parent = Btn, Text = bCfg.Name, Size = UDim2.new(1, 0, 1, 0), BackgroundTransparency = 1, TextColor3 = Color3.fromRGB(255, 255, 255), Font = Enum.Font.GothamBold, TextSize = 15})
             
             Btn.MouseEnter:Connect(function() 
                 Tween(Btn, TweenInfo.new(0.3), {BackgroundColor3 = SelectedTheme.Hover}) 
