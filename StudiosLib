@@ -1,4 +1,4 @@
--- [[ Studios Raw (V8.0) - Spectrum Theme Revolution ]]
+-- [[ Studios Raw (V9.0) - Nexus UI Revolution ]]
 -- Created for "Studios Raw" by Antigravity
 -- Build: Final Ultra Premium | Mobile Optimized | 850+ Lines Focus
 -- License: Open Source (Studios Raw)
@@ -319,167 +319,142 @@ function StudiosLib:Notify(config)
     end)
 end
 
--- [[ 🎬 MASTER INTRO SYSTEM (FIXED BUG) ]]
+-- [[ 🎬 V9.0 NEXUS INTRO - HEXAGON MATRIX REVEAL ]]
 
 function StudiosLib:PlayIntro()
     local IntroGui = Create("ScreenGui", {Name = "StudiosIntro", Parent = CoreGui})
+    
+    -- Dark void background
     local Background = Create("Frame", {
         Parent = IntroGui, 
         Size = UDim2.new(1, 0, 1, 0), 
-        BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-        BackgroundTransparency = 1,
+        BackgroundColor3 = Color3.fromRGB(5, 5, 10),
+        BackgroundTransparency = 0,
         ZIndex = 1100
     })
-    local BackGradient = Create("UIGradient", {
+    
+    -- Hexagon Grid Container
+    local HexGrid = Create("Frame", {
         Parent = Background,
-        Color = ColorSequence.new({
-            ColorSequenceKeypoint.new(0, Color3.fromRGB(10, 10, 20)),
-            ColorSequenceKeypoint.new(0.5, Color3.fromRGB(40, 0, 80)),
-            ColorSequenceKeypoint.new(1, Color3.fromRGB(10, 10, 20))
-        }),
-        Rotation = 0
+        Size = UDim2.new(1, 0, 1, 0),
+        BackgroundTransparency = 1,
+        ZIndex = 1101
     })
     
+    -- Create hexagon grid pattern
     task.spawn(function()
-        local rot = 0
-        while Background and Background.Parent do
-            rot = rot + 2
-            BackGradient.Rotation = rot % 360
-            task.wait(0.02)
+        for i = 1, 12 do
+            local hex = Create("Frame", {
+                Parent = HexGrid,
+                Size = UDim2.new(0, 80, 0, 80),
+                Position = UDim2.new(math.random(), 0, math.random(), 0),
+                BackgroundColor3 = Color3.fromHSV(math.random(), 0.6, 0.8),
+                BackgroundTransparency = 1,
+                Rotation = 30,
+                ZIndex = 1102
+            })
+            Create("UICorner", {CornerRadius = UDim.new(0, 12), Parent = hex})
+            Create("UIStroke", {
+                Parent = hex,
+                Thickness = 2,
+                Color = hex.BackgroundColor3,
+                Transparency = 0
+            })
+            
+            task.wait(0.08)
+            Tween(hex, TweenInfo.new(0.6, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {BackgroundTransparency = 0.7})
+            Tween(hex.UIStroke, TweenInfo.new(0.6), {Transparency = 0.3})
         end
     end)
     
-    local Logo = Create("TextLabel", {
-        Parent = Background, 
-        Text = "Studios Raw", 
-        Size = UDim2.new(1, 0, 1, 0), 
-        BackgroundTransparency = 1, 
-        TextColor3 = Color3.fromRGB(100, 100, 255), -- Start with blue
-        Font = Enum.Font.GothamBold, 
-        TextSize = 2, 
-        TextTransparency = 1,
-        TextStrokeTransparency = 0.5,
-        TextStrokeColor3 = Color3.fromRGB(255, 255, 255)
-    })
-    
-    -- V8.0 Ring Wave Effect
-    local RingWave = Create("Frame", {
+    -- Central Logo with Glitch Effect
+    local LogoContainer = Create("Frame", {
         Parent = Background,
         AnchorPoint = Vector2.new(0.5, 0.5),
         Position = UDim2.new(0.5, 0, 0.5, 0),
-        Size = UDim2.new(0, 0, 0, 0),
+        Size = UDim2.new(0, 600, 0, 200),
         BackgroundTransparency = 1,
-        ZIndex = 1102
-    })
-    local RingStroke = Create("UIStroke", {
-        Parent = RingWave,
-        Thickness = 3,
-        Color = Color3.fromRGB(100, 200, 255),
-        Transparency = 0
-    })
-    Create("UICorner", {CornerRadius = UDim.new(1, 0), Parent = RingWave})
-
-    local LogoShine = Create("Frame", {
-        Parent = Logo,
-        Size = UDim2.new(0, 50, 2, 0),
-        Position = UDim2.new(-0.2, 0, -0.5, 0),
-        BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-        BackgroundTransparency = 0.8,
-        Rotation = 25,
         ZIndex = 1105
     })
-    Create("UIGradient", {
-        Parent = LogoShine,
-        Transparency = NumberSequence.new({
-            NumberSequenceKeypoint.new(0, 1),
-            NumberSequenceKeypoint.new(0.5, 0),
-            NumberSequenceKeypoint.new(1, 1)
-        })
-    })
-
-    local Glow = Create("ImageLabel", {
-        Parent = Background, 
-        AnchorPoint = Vector2.new(0.5, 0.5), 
-        Position = UDim2.new(0.5, 0, 0.5, 0), 
-        Size = UDim2.new(0, 0, 0, 0), 
+    
+    local Logo = Create("TextLabel", {
+        Parent = LogoContainer, 
+        Text = "STUDIOS RAW", 
+        Size = UDim2.new(1, 0, 1, 0), 
         BackgroundTransparency = 1, 
-        Image = "rbxassetid://3570695787", 
-        ImageColor3 = Color3.fromRGB(255, 255, 255), 
-        ImageTransparency = 1
+        TextColor3 = Color3.fromRGB(255, 255, 255), 
+        Font = Enum.Font.GothamBold, 
+        TextSize = 48, 
+        TextTransparency = 1,
+        TextStrokeTransparency = 0.7,
+        TextStrokeColor3 = Color3.fromRGB(0, 200, 255)
     })
-
-    task.wait(0.3)
     
-    -- V8.0 Zoom Burst Effect
-    local tLogo = Tween(Logo, TweenInfo.new(1.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {TextSize = 70, TextTransparency = 0})
-    local tGlow = Tween(Glow, TweenInfo.new(2.0, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(0, 1200, 0, 1200), ImageTransparency = 0.4})
+    -- Scan Line Effect
+    local ScanLine = Create("Frame", {
+        Parent = Background,
+        Size = UDim2.new(1, 0, 0, 2),
+        Position = UDim2.new(0, 0, 0, 0),
+        BackgroundColor3 = Color3.fromRGB(0, 255, 200),
+        BackgroundTransparency = 0.5,
+        ZIndex = 1110
+    })
     
-    -- Ring Wave Animation
+    -- Scan animation
     task.spawn(function()
-        task.wait(0.5)
-        Tween(RingWave, TweenInfo.new(1.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(0, 800, 0, 800)})
-        Tween(RingStroke, TweenInfo.new(1.5), {Transparency = 1})
-    end)
-    
-    -- Color Shift Animation
-    task.spawn(function()
-        task.wait(0.8)
-        Tween(Logo, TweenInfo.new(1.2, Enum.EasingStyle.Sine), {TextColor3 = Color3.fromRGB(255, 100, 255)}) -- Shift to pink
-        task.wait(1.2)
-        Tween(Logo, TweenInfo.new(0.8, Enum.EasingStyle.Sine), {TextColor3 = Color3.fromRGB(255, 255, 255)}) -- Back to white
-    end)
-    
-    -- V8.0 Enhanced Particle Logic
-    task.spawn(function()
-        for i = 1, 25 do -- More particles
-            local p = Create("Frame", {
-                Parent = Background,
-                Size = UDim2.new(0, math.random(3, 8), 0, math.random(3, 8)),
-                Position = UDim2.new(math.random(), 0, 1.1, 0),
-                BackgroundColor3 = Color3.fromHSV(math.random(), 0.8, 1), -- Random colors
-                BackgroundTransparency = 0.4,
-                ZIndex = 1101
-            })
-            Create("UICorner", {CornerRadius = UDim.new(1, 0), Parent = p})
-            
-            -- Add glow to particles
-            local pGlow = Create("UIStroke", {
-                Parent = p,
-                Thickness = 2,
-                Color = p.BackgroundColor3,
-                Transparency = 0.3
-            })
-            
-            Tween(p, TweenInfo.new(math.random(4, 8), Enum.EasingStyle.Sine), {
-                Position = UDim2.new(p.Position.X.Scale, 0, -0.1, 0), 
-                BackgroundTransparency = 1,
-                Rotation = math.random(-180, 180)
-            })
-            Tween(pGlow, TweenInfo.new(math.random(4, 8)), {Transparency = 1})
-            task.wait(0.15)
+        for i = 1, 3 do
+            Tween(ScanLine, TweenInfo.new(1.5, Enum.EasingStyle.Linear), {Position = UDim2.new(0, 0, 1, 0)})
+            task.wait(1.5)
+            ScanLine.Position = UDim2.new(0, 0, 0, 0)
         end
     end)
-
+    
     task.wait(0.5)
-    Tween(LogoShine, TweenInfo.new(1.5, Enum.EasingStyle.Quart, Enum.EasingDirection.InOut), {Position = UDim2.new(1.2, 0, -0.5, 0)})
     
-    tGlow.Completed:Wait() 
-    task.wait(2.2)
+    -- Logo reveal with glitch
+    Tween(Logo, TweenInfo.new(0.8, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {TextTransparency = 0})
     
-    -- Fade out logic
-    local tOut1 = Tween(Logo, TweenInfo.new(1.2, Enum.EasingStyle.Back, Enum.EasingDirection.In), {TextSize = 2, TextTransparency = 1})
-    local tOut2 = Tween(Glow, TweenInfo.new(1.2, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Size = UDim2.new(0, 0, 0, 0), ImageTransparency = 1})
-    local tOut3 = Tween(Background, TweenInfo.new(1.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {BackgroundTransparency = 1})
+    -- Glitch effect
+    task.spawn(function()
+        for i = 1, 6 do
+            Logo.Position = UDim2.new(0, math.random(-5, 5), 0, math.random(-3, 3))
+            task.wait(0.1)
+        end
+        Logo.Position = UDim2.new(0, 0, 0, 0)
+    end)
     
-    tOut3.Completed:Wait() -- Force the script to WAIT for the fade out
-    task.wait(0.5)
+    -- Subtitle appear
+    local Subtitle = Create("TextLabel", {
+        Parent = LogoContainer,
+        Text = "V9.0 NEXUS",
+        Size = UDim2.new(1, 0, 0, 30),
+        Position = UDim2.new(0, 0, 1, -20),
+        BackgroundTransparency = 1,
+        TextColor3 = Color3.fromRGB(0, 255, 200),
+        Font = Enum.Font.GothamMedium,
+        TextSize = 14,
+        TextTransparency = 1,
+        ZIndex = 1105
+    })
+    
+    task.wait(0.8)
+    Tween(Subtitle, TweenInfo.new(0.5), {TextTransparency = 0})
+    
+    task.wait(2.0)
+    
+    -- Fade out
+    Tween(Background, TweenInfo.new(0.8, Enum.EasingStyle.Quart), {BackgroundTransparency = 1})
+    Tween(Logo, TweenInfo.new(0.8), {TextTransparency = 1})
+    Tween(Subtitle, TweenInfo.new(0.8), {TextTransparency = 1})
+    
+    task.wait(0.8)
     IntroGui:Destroy()
 end
 
 -- [[ 🪟 MASTER UI WINDOW COMPONENT ]]
 
 function StudiosLib:CreateWindow(config)
-    local WindowName = config.Name or "Studios Raw (V8.0)"
+    local WindowName = config.Name or "Studios Raw (V9.0)"
     local SelectedTheme = StudiosLib.Themes[config.Theme] or StudiosLib.Themes.Default
     StudiosLib.SelectedTheme = SelectedTheme
     
@@ -799,6 +774,18 @@ function StudiosLib:CreateWindow(config)
             ImageColor3 = SelectedTheme.SubText
         })
         
+        -- V9.0 Icon Glow Effect
+        local IconGlow = Create("ImageLabel", {
+            Parent = TabBtn,
+            Size = UDim2.new(0, 30, 0, 30),
+            Position = UDim2.new(0, 6, 0.5, -15),
+            BackgroundTransparency = 1,
+            Image = "rbxassetid://3570695787",
+            ImageColor3 = SelectedTheme.Accent,
+            ImageTransparency = 1,
+            ZIndex = -1
+        })
+        
         local TabLbl = Create("TextLabel", {
             Parent = TabBtn, 
             Text = name, 
@@ -810,6 +797,20 @@ function StudiosLib:CreateWindow(config)
             TextSize = 14, 
             TextXAlignment = Enum.TextXAlignment.Left
         })
+        
+        -- V9.0 Hover Effects
+        TabBtn.MouseEnter:Connect(function()
+            Tween(TabIcon, TweenInfo.new(0.3), {ImageColor3 = SelectedTheme.Accent, Size = UDim2.new(0, 24, 0, 24), Position = UDim2.new(0, 9, 0.5, -12)})
+            Tween(TabLbl, TweenInfo.new(0.3), {TextColor3 = SelectedTheme.Text})
+            Tween(IconGlow, TweenInfo.new(0.3), {ImageTransparency = 0.7})
+        end)
+        
+        TabBtn.MouseLeave:Connect(function()
+            if Page.Visible then return end -- Don't reset if active
+            Tween(TabIcon, TweenInfo.new(0.3), {ImageColor3 = SelectedTheme.SubText, Size = UDim2.new(0, 22, 0, 22), Position = UDim2.new(0, 10, 0.5, -11)})
+            Tween(TabLbl, TweenInfo.new(0.3), {TextColor3 = SelectedTheme.SubText})
+            Tween(IconGlow, TweenInfo.new(0.3), {ImageTransparency = 1})
+        end)
 
         local Page = Create("CanvasGroup", {
             Parent = ContentHolder, 
