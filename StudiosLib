@@ -12,6 +12,7 @@ local StudiosLib = {
     Notifications = {},
     SelectedTheme = nil,
     SelectedTab = nil,
+    Authenticated = false,
     ToggleKey = Enum.KeyCode.RightControl
 }
 
@@ -224,18 +225,20 @@ function StudiosLib:PlayIntro()
         ImageTransparency = 1
     })
 
-    task.wait(0.2)
-    Tween(Logo, TweenInfo.new(1.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {TextSize = 70, TextTransparency = 0})
-    Tween(Glow, TweenInfo.new(1.8, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(0, 900, 0, 900), ImageTransparency = 0.5})
+    task.wait(0.3)
+    local tLogo = Tween(Logo, TweenInfo.new(1.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {TextSize = 70, TextTransparency = 0})
+    local tGlow = Tween(Glow, TweenInfo.new(1.8, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(0, 900, 0, 900), ImageTransparency = 0.5})
     
+    tGlow.Completed:Wait() -- Force the script to WAIT for the logo to appear
     task.wait(2.2)
     
     -- Fade out logic
-    Tween(Logo, TweenInfo.new(1.2, Enum.EasingStyle.Back, Enum.EasingDirection.In), {TextSize = 2, TextTransparency = 1})
-    Tween(Glow, TweenInfo.new(1.2, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Size = UDim2.new(0, 0, 0, 0), ImageTransparency = 1})
-    Tween(Background, TweenInfo.new(1.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {BackgroundTransparency = 1})
+    local tOut1 = Tween(Logo, TweenInfo.new(1.2, Enum.EasingStyle.Back, Enum.EasingDirection.In), {TextSize = 2, TextTransparency = 1})
+    local tOut2 = Tween(Glow, TweenInfo.new(1.2, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Size = UDim2.new(0, 0, 0, 0), ImageTransparency = 1})
+    local tOut3 = Tween(Background, TweenInfo.new(1.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {BackgroundTransparency = 1})
     
-    task.wait(1.5)
+    tOut3.Completed:Wait() -- Force the script to WAIT for the fade out
+    task.wait(0.5)
     IntroGui:Destroy()
 end
 
@@ -263,16 +266,11 @@ function StudiosLib:CreateWindow(config)
         BackgroundColor3 = SelectedTheme.Sidebar,
         Image = "rbxassetid://6031070992", -- Home Icon
         ImageColor3 = SelectedTheme.Accent,
-        Visible = not KeyEnabled,
+        Visible = false, -- Force hidden until auth or check
         ZIndex = 500
     })
     Create("UICorner", {CornerRadius = UDim.new(1, 0), Parent = MobileBtn})
     Create("UIStroke", {Thickness = 3, Color = SelectedTheme.Stroke, Parent = MobileBtn})
-
-    local mtDragging, mtStart, mtSPos
-    MobileBtn.InputBegan:Connect(function(i) if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then mtDragging = true mtStart = i.Position mtSPos = MobileBtn.Position end end)
-    UserInputService.InputChanged:Connect(function(i) if mtDragging and (i.UserInputType == Enum.UserInputType.MouseMovement or i.UserInputType == Enum.UserInputType.Touch) then local delta = i.Position - mtStart MobileBtn.Position = UDim2.new(mtSPos.X.Scale, mtSPos.X.Offset + delta.X, mtSPos.Y.Scale, mtSPos.Y.Offset + delta.Y) end end)
-    UserInputService.InputEnded:Connect(function(i) if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then mtDragging = false end end)
 
     -- [ Main Frame ]
     local MainFrame = Create("Frame", {
@@ -282,12 +280,29 @@ function StudiosLib:CreateWindow(config)
         BackgroundColor3 = SelectedTheme.Main,
         BorderSizePixel = 0,
         ClipsDescendants = true,
-        Visible = not KeyEnabled
+        Visible = false -- Force hidden until auth or check
     })
     Create("UICorner", {CornerRadius = UDim.new(0, 16), Parent = MainFrame})
     local AppStroke = Create("UIStroke", {Thickness = 2.5, Color = SelectedTheme.Stroke, Parent = MainFrame})
 
-    MobileBtn.MouseButton1Click:Connect(function() MainFrame.Visible = not MainFrame.Visible end)
+    -- Initialization of visibility after creation
+    if not KeyEnabled then
+        MainFrame.Visible = true
+        MobileBtn.Visible = true
+    else
+        MainFrame.Visible = false
+        MobileBtn.Visible = false
+    end
+
+    local mtDragging, mtStart, mtSPos
+    MobileBtn.InputBegan:Connect(function(i) if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then mtDragging = true mtStart = i.Position mtSPos = MobileBtn.Position end end)
+    UserInputService.InputChanged:Connect(function(i) if mtDragging and (i.UserInputType == Enum.UserInputType.MouseMovement or i.UserInputType == Enum.UserInputType.Touch) then local delta = i.Position - mtStart MobileBtn.Position = UDim2.new(mtSPos.X.Scale, mtSPos.X.Offset + delta.X, mtSPos.Y.Scale, mtSPos.Y.Offset + delta.Y) end end)
+    UserInputService.InputEnded:Connect(function(i) if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then mtDragging = false end end)
+
+    MobileBtn.MouseButton1Click:Connect(function() 
+        if KeyEnabled and not StudiosLib.Authenticated then return end
+        MainFrame.Visible = not MainFrame.Visible 
+    end)
 
     -- [ Sidebar Navigation ]
     local Sidebar = Create("Frame", {
@@ -427,6 +442,7 @@ function StudiosLib:CreateWindow(config)
         ConfirmBtn.MouseButton1Click:Connect(function()
             for _, k in pairs(Keys) do
                 if KeyField.Text == k then
+                    StudiosLib.Authenticated = true
                     AuthOverlay:Destroy()
                     MainFrame.Visible = true
                     MobileBtn.Visible = true
