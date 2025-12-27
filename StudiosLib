@@ -340,7 +340,9 @@ function StudiosLib:PlayIntro()
         TextColor3 = Color3.fromRGB(255, 255, 255), 
         Font = Enum.Font.GothamBold, 
         TextSize = 48, 
-        TextTransparency = 1
+        TextTransparency = 1,
+        TextStrokeTransparency = 0.5,
+        TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
     })
     
     task.wait(0.3)
