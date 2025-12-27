@@ -13,7 +13,7 @@ local StudiosLib = {
     SelectedTheme = nil,
     SelectedTab = nil,
     Authenticated = false,
-    ToggleKey = Enum.KeyCode.RightControl
+    ToggleKey = Enum.KeyCode.K
 }
 
 -- [[ ⚙️ CORE SERVICES ]]
@@ -252,6 +252,10 @@ function StudiosLib:CreateWindow(config)
     local KeyEnabled = config.KeySystem or false
     local Keys = config.Keys or {"admin"}
     if type(Keys) == "string" then Keys = {Keys} end
+
+    if config.ToggleKey then
+        StudiosLib.ToggleKey = config.ToggleKey
+    end
 
     -- Trigger Fix-checked Intro
     StudiosLib:PlayIntro()
