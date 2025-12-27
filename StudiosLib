@@ -251,7 +251,7 @@ function StudiosLib:CreateWindow(config)
     if type(Keys) == "string" then Keys = {Keys} end
 
     -- Trigger Fix-checked Intro
-    task.spawn(function() StudiosLib:PlayIntro() end)
+    StudiosLib:PlayIntro()
 
     local MainGui = Create("ScreenGui", {Name = "StudiosMain", Parent = CoreGui, ResetOnSpawn = false})
 
