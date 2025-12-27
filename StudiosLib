@@ -1,4 +1,4 @@
--- [[ Studios Raw (V6.0) - Absolute Premium Experience ]]
+-- [[ Studios Raw (V7.0) - Horizon Next-Gen Architecture ]]
 -- Created for "Studios Raw" by Antigravity
 -- Build: Final Ultra Premium | Mobile Optimized | 850+ Lines Focus
 -- License: Open Source (Studios Raw)
@@ -324,7 +324,7 @@ end
 -- [[ 🪟 MASTER UI WINDOW COMPONENT ]]
 
 function StudiosLib:CreateWindow(config)
-    local WindowName = config.Name or "Studios Raw (V6.0)"
+    local WindowName = config.Name or "Studios Raw (V7.0)"
     local SelectedTheme = StudiosLib.Themes[config.Theme] or StudiosLib.Themes.Default
     StudiosLib.SelectedTheme = SelectedTheme
     
@@ -415,15 +415,18 @@ function StudiosLib:CreateWindow(config)
 
     local AppScale = Create("UIScale", {Parent = MainFrame, Scale = 0.7})
 
-    -- Initialization of visibility after creation
+    -- Initialization of visibility after creation (V7 Elastic)
     if not KeyEnabled then
         MainFrame.Visible = true
         MobileBtn.Visible = true
+        MainFrame.Size = UDim2.new(0, 50, 0, 50)
+        Tween(MainFrame, TweenInfo.new(0.8, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Size = UDim2.new(0, 720, 0, 520)})
         Tween(AppScale, TweenInfo.new(0.6, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Scale = 1})
     else
         MainFrame.Visible = false
         MobileBtn.Visible = false
     end
+ Linda "Card" Style Components
 
     local mtDragging, mtStart, mtSPos
     MobileBtn.InputBegan:Connect(function(i) if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then mtDragging = true mtStart = i.Position mtSPos = MobileBtn.Position end end)
@@ -436,42 +439,41 @@ function StudiosLib:CreateWindow(config)
         MainFrame.Visible = not MainFrame.Visible 
     end)
 
-    -- [ Sidebar Navigation ]
-    local Sidebar = Create("Frame", {
+    -- [ V7.0 Horizon Layout Elements ]
+    local TopNav = Create("Frame", {
         Parent = MainFrame,
-        Size = UDim2.new(0, 220, 1, 0),
-        BackgroundColor3 = SelectedTheme.Sidebar,
-        BorderSizePixel = 0
-    })
-    Create("UICorner", {CornerRadius = UDim.new(0, 18), Parent = Sidebar})
-    Create("UIGradient", {
-        Parent = Sidebar,
-        Color = ColorSequence.new({
-            ColorSequenceKeypoint.new(0, Color3.new(1, 1, 1)),
-            ColorSequenceKeypoint.new(1, Color3.fromRGB(200, 200, 200))
-        }),
-        Rotation = 90
-    })
-
-    local TitleLbl = Create("TextLabel", {
-        Parent = Sidebar,
-        Text = WindowName,
-        Size = UDim2.new(1, 0, 0, 80),
+        Size = UDim2.new(1, -40, 0, 55),
+        Position = UDim2.new(0, 20, 0, 70),
         BackgroundTransparency = 1,
-        TextColor3 = SelectedTheme.Text,
-        Font = Enum.Font.GothamBold,
-        TextSize = 24
+        ZIndex = 105
     })
-
     local NavList = Create("ScrollingFrame", {
-        Parent = Sidebar,
-        Position = UDim2.new(0, 10, 0, 85),
-        Size = UDim2.new(1, -20, 1, -110),
+        Parent = TopNav,
+        Size = UDim2.new(1, 0, 1, 0),
         BackgroundTransparency = 1,
         ScrollBarThickness = 0,
-        AutomaticCanvasSize = Enum.AutomaticSize.Y
+        CanvasSize = UDim2.new(0, 0, 1, 0),
+        AutomaticCanvasSize = Enum.AutomaticSize.X
     })
-    Create("UIListLayout", {Parent = NavList, Padding = UDim.new(0, 12), SortOrder = Enum.SortOrder.LayoutOrder, HorizontalAlignment = Enum.HorizontalAlignment.Center})
+    Create("UIListLayout", {
+        Parent = NavList, 
+        Padding = UDim.new(0, 25), 
+        FillDirection = Enum.FillDirection.Horizontal, 
+        VerticalAlignment = Enum.VerticalAlignment.Center,
+        HorizontalAlignment = Enum.HorizontalAlignment.Left
+    })
+    Create("UIPadding", {Parent = NavList, PaddingLeft = UDim.new(0, 10)})
+
+    -- Underline Glow
+    local NavGlow = Create("Frame", {
+        Parent = NavList,
+        Size = UDim2.new(0, 0, 0, 2),
+        Position = UDim2.new(0, 0, 1, -5),
+        BackgroundColor3 = SelectedTheme.Accent,
+        ZIndex = 110,
+        Visible = false
+    })
+    Create("UICorner", {CornerRadius = UDim.new(1, 0), Parent = NavGlow})
 
     -- [ V6.0 Render Loop ]
     RunService.RenderStepped:Connect(function()
@@ -483,20 +485,18 @@ function StudiosLib:CreateWindow(config)
     end)
 
     -- [ Content Container ]
-
-    -- [ Content Container ]
     local ContentHolder = Create("Frame", {
         Parent = MainFrame,
-        Size = UDim2.new(1, -240, 1, -90),
-        Position = UDim2.new(0, 230, 0, 80),
+        Size = UDim2.new(1, -40, 1, -150),
+        Position = UDim2.new(0, 20, 0, 130),
         BackgroundTransparency = 1
     })
 
     -- [ Header Control Bar ]
     local TopBar = Create("Frame", {
         Parent = MainFrame,
-        Size = UDim2.new(1, -220, 0, 80),
-        Position = UDim2.new(0, 220, 0, 0),
+        Size = UDim2.new(1, 0, 0, 70),
+        Position = UDim2.new(0, 0, 0, 0),
         BackgroundTransparency = 1
     })
     Create("UIGradient", {
@@ -611,6 +611,8 @@ function StudiosLib:CreateWindow(config)
                     AuthOverlay:Destroy()
                     MainFrame.Visible = true
                     MobileBtn.Visible = true
+                    MainFrame.Size = UDim2.new(0, 50, 0, 50)
+                    Tween(MainFrame, TweenInfo.new(0.8, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Size = UDim2.new(0, 720, 0, 520)})
                     Tween(AppScale, TweenInfo.new(0.6, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Scale = 1})
                     StudiosLib:Notify({Title = "Autenticado!", Content = "Acesso garantido ao painel.", Type = "Success"})
                     return
@@ -628,19 +630,16 @@ function StudiosLib:CreateWindow(config)
     function WindowAPI:CreateTab(name, icon)
         local TabBtn = Create("TextButton", {
             Parent = NavList, 
-            Size = UDim2.new(1, 0, 0, 50), 
-            BackgroundColor3 = SelectedTheme.Element, 
+            Size = UDim2.new(0, 120, 1, 0), 
             BackgroundTransparency = 1, 
             Text = "", 
             AutoButtonColor = false
         })
-        Create("UICorner", {CornerRadius = UDim.new(0, 14), Parent = TabBtn})
-        local TabStroke = Create("UIStroke", {Thickness = 1.5, Color = SelectedTheme.Stroke, Transparency = 1, Parent = TabBtn})
         
         local TabIcon = Create("ImageLabel", {
             Parent = TabBtn, 
-            Size = UDim2.new(0, 26, 0, 26), 
-            Position = UDim2.new(0, 16, 0.5, -13), 
+            Size = UDim2.new(0, 22, 0, 22), 
+            Position = UDim2.new(0, 10, 0.5, -11), 
             BackgroundTransparency = 1, 
             Image = icon or "rbxassetid://6031070992", 
             ImageColor3 = SelectedTheme.SubText
@@ -649,12 +648,12 @@ function StudiosLib:CreateWindow(config)
         local TabLbl = Create("TextLabel", {
             Parent = TabBtn, 
             Text = name, 
-            Size = UDim2.new(1, -60, 1, 0), 
-            Position = UDim2.new(0, 55, 0, 0), 
+            Size = UDim2.new(1, -40, 1, 0), 
+            Position = UDim2.new(0, 38, 0, 0), 
             BackgroundTransparency = 1, 
             TextColor3 = SelectedTheme.SubText, 
             Font = Enum.Font.GothamSemibold, 
-            TextSize = 16, 
+            TextSize = 14, 
             TextXAlignment = Enum.TextXAlignment.Left
         })
 
@@ -686,15 +685,26 @@ function StudiosLib:CreateWindow(config)
             
             Page.Visible = true
             TabNameLbl.Text = name
-            Tween(TabBtn, TweenInfo.new(0.5, Enum.EasingStyle.Quart), {BackgroundTransparency = 0, BackgroundColor3 = SelectedTheme.Accent})
-            Tween(TabIcon, TweenInfo.new(0.5, Enum.EasingStyle.Quart), {ImageColor3 = SelectedTheme.SelectedText})
-            Tween(TabLbl, TweenInfo.new(0.5, Enum.EasingStyle.Quart), {TextColor3 = SelectedTheme.SelectedText})
-            Tween(TabStroke, TweenInfo.new(0.5), {Transparency = 0})
+            
+            -- Nav Glow Logic
+            NavGlow.Visible = true
+            Tween(NavGlow, TweenInfo.new(0.5, Enum.EasingStyle.Quart), {
+                Size = UDim2.new(0, TabBtn.AbsoluteSize.X, 0, 2),
+                Position = UDim2.new(0, TabBtn.AbsolutePosition.X - NavList.AbsolutePosition.X, 1, -5)
+            })
 
-            -- Page Slide Animation
-            Page.Position = UDim2.new(0, 30, 0, 0)
+            Tween(TabIcon, TweenInfo.new(0.5), {ImageColor3 = SelectedTheme.Accent})
+            Tween(TabLbl, TweenInfo.new(0.5), {TextColor3 = SelectedTheme.Text})
+
+            -- Page Slide & Zoom Animation (V7 Cross-Fade Zoom)
+            Page.Position = UDim2.new(0, 0, 0, 10)
+            Page.Size = UDim2.new(1.05, 0, 1.05, 0)
             Page.GroupTransparency = 1
-            Tween(Page, TweenInfo.new(0.5, Enum.EasingStyle.Quart), {Position = UDim2.new(0, 0, 0, 0), GroupTransparency = 0})
+            Tween(Page, TweenInfo.new(0.6, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+                Position = UDim2.new(0, 0, 0, 0), 
+                Size = UDim2.new(1, 0, 1, 0),
+                GroupTransparency = 0
+            })
         end
 
         TabBtn.MouseButton1Click:Connect(function()
@@ -712,6 +722,7 @@ function StudiosLib:CreateWindow(config)
                 Parent = PageScroll, 
                 Size = UDim2.new(1, -30, 0, 52), 
                 BackgroundColor3 = SelectedTheme.Element, 
+                BackgroundTransparency = 0.2, -- Card Feel
                 Text = "", 
                 AutoButtonColor = false
             })
@@ -737,7 +748,7 @@ function StudiosLib:CreateWindow(config)
         -- [ COMPONENT: MODERN TOGGLE ]
         function TabAPI:CreateToggle(tCfg)
             local val = tCfg.CurrentValue or false
-            local Tgl = Create("Frame", {Parent = PageScroll, Size = UDim2.new(1, -30, 0, 60), BackgroundColor3 = SelectedTheme.Element})
+            local Tgl = Create("Frame", {Parent = PageScroll, Size = UDim2.new(1, -30, 0, 60), BackgroundColor3 = SelectedTheme.Element, BackgroundTransparency = 0.2})
             Create("UICorner", {CornerRadius = UDim.new(0, 14), Parent = Tgl})
             Create("UIStroke", {Thickness = 1.5, Color = SelectedTheme.Stroke, Parent = Tgl})
             
@@ -762,7 +773,7 @@ function StudiosLib:CreateWindow(config)
         -- [ COMPONENT: PRECISION SLIDER ]
         function TabAPI:CreateSlider(sCfg)
             local min, max, cur = sCfg.Min, sCfg.Max, sCfg.CurrentValue or sCfg.Min
-            local Sld = Create("Frame", {Parent = PageScroll, Size = UDim2.new(1, -30, 0, 75), BackgroundColor3 = SelectedTheme.Element})
+            local Sld = Create("Frame", {Parent = PageScroll, Size = UDim2.new(1, -30, 0, 75), BackgroundColor3 = SelectedTheme.Element, BackgroundTransparency = 0.2})
             Create("UICorner", {CornerRadius = UDim.new(0, 12), Parent = Sld})
             Create("UIStroke", {Thickness = 1.5, Color = SelectedTheme.Stroke, Parent = Sld})
 
@@ -829,7 +840,7 @@ function StudiosLib:CreateWindow(config)
 
         -- [ COMPONENT: ADAPTABLE INPUT ]
         function TabAPI:CreateInput(iCfg)
-            local Frm = Create("Frame", {Parent = PageScroll, Size = UDim2.new(1, -30, 0, 60), BackgroundColor3 = SelectedTheme.Element})
+            local Frm = Create("Frame", {Parent = PageScroll, Size = UDim2.new(1, -30, 0, 60), BackgroundColor3 = SelectedTheme.Element, BackgroundTransparency = 0.2})
             Create("UICorner", {CornerRadius = UDim.new(0, 12), Parent = Frm})
             Create("UIStroke", {Thickness = 1.5, Color = SelectedTheme.Stroke, Parent = Frm})
 
@@ -985,15 +996,13 @@ end
 -- ..........................................................................................................
 -- ..........................................................................................................
 -- ..........................................................................................................
--- [[ V6.0 MASTER RELEASE NOTES ]]
--- 🌟 Mouse-Responsive Glow System (Dynamic Fidelity)
--- 🌟 Advanced Triple-Layer Glassmorphism Surface
--- 🌟 Tactical Ripple Feedback on all Interactive Elements
--- 🌟 Cinematic Intro V3 with Motion Gradients & Shine
--- 🌟 Draggable Responsive Mobile Toggle
--- 🌟 Expanded API with Bezier & Typewriter Utilities
--- 🌟 Optimized Render Engine with Performance Fallback
--- 🌟 Full Custom Theme Logic & Integrated Key System
+-- [[ V7.0 MASTER RELEASE NOTES ]]
+-- 🌟 Horizon Top-Navigation Architecture (Sleek UI)
+-- 🌟 Dynamic Underline Glow (Interactive Nav)
+-- 🌟 Elastic Window Entrance (High-Energy Anim)
+-- 🌟 Cross-Fade Zoom Tab Transitions (VFX)
+-- 🌟 Floating Card Component Design (Depth)
+-- 🌟 Absolute Unified Glass Panel
 
 function StudiosLib:GetLibraryVersion()
     InternalLog("Versão atual da Studios Raw: " .. StudiosLib.Flags._VERSION)
